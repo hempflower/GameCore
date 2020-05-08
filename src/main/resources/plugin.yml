@@ -1,0 +1,3 @@
+name: GameCore
+version: ${project.version}
+main: top.mahua_a.gamecore.GameCore
