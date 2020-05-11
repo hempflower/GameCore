@@ -45,4 +45,16 @@ public class ArenaManager {
         }
     }
 
+    public static void removeArena(Arena arena) {
+        arena.destroy();
+        arenas.remove(arena);
+    }
+
+    public static void clearArena() {
+        Iterator<Arena> arenaIterator = arenas.iterator();
+        while (arenaIterator.hasNext()){
+            removeArena(arenaIterator.next());
+        }
+    }
+
 }

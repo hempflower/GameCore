@@ -45,7 +45,10 @@ public class Arena {
         return players.contains(player);
     }
 
-    public void destory() {
+    /**
+     * Plugin shouldn't call this!
+     */
+    protected void destroy() {
         //tp all player
         for(Player player : players){
             player.teleport(exitLocation);

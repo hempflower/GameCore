@@ -28,6 +28,8 @@ public final class GameCore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        // Destroy all arena
+        ArenaManager.clearArena();
     }
 
     public static MultiverseCore getMultiverseCore() {
