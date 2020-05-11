@@ -8,21 +8,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import top.mahua_a.gamecore.arena.ArenaManager;
+import top.mahua_a.gamecore.listener.PlayerListener;
 
 import java.util.Objects;
 
 public final class GameCore extends JavaPlugin {
     private static MultiverseCore multiverseCore;
 
+    private static GameCore instance;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
+        instance = this;
         multiverseCore = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
         if (multiverseCore == null) {
             getLogger().warning("Unable to get mv-core. Disabling...");
             this.onDisable();
         }
         ArenaManager.removeOldArenaWorld();
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(),this);
     }
 
     @Override
@@ -43,5 +48,9 @@ public final class GameCore extends JavaPlugin {
         }
         ArenaManager.createNewArena(Objects.requireNonNull(getServer().getWorld("world")),((Player) sender).getLocation());
         return true;
+    }
+
+    public static GameCore getInstance() {
+        return instance;
     }
 }
