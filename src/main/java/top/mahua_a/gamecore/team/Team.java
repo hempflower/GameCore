@@ -1,9 +1,7 @@
 package top.mahua_a.gamecore.team;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
-import sun.plugin2.main.server.Plugin;
 
 import java.util.HashSet;
 import java.util.Set;

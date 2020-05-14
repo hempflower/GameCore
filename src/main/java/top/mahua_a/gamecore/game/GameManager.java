@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
 import top.mahua_a.gamecore.arena.Arena;
-import top.mahua_a.gamecore.arena.ArenaManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
