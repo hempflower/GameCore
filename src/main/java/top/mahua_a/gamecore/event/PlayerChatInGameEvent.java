@@ -17,7 +17,7 @@ public class PlayerChatInGameEvent extends PlayerEvent implements Cancellable {
     public PlayerChatInGameEvent(Player who, Game game, String msg, ChatType type) {
         super(who);
         this.game = game;
-        this.msg = msg;
+        this.msg = "[GAMECORE]" + msg;
         this.type = type;
     }
 

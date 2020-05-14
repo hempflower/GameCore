@@ -25,21 +25,21 @@ public class GameManager {
         gameMap.computeIfAbsent(plugin, k -> new HashSet<>()).remove(game);
     }
 
-    public static boolean isInGame(Player player){
-        for(Set<Game> gameSet:gameMap.values()){
-            for(Game game : gameSet){
-               if(game.isInGame(player)){
+    public static boolean isInGame(Player player) {
+        for (Set<Game> gameSet : gameMap.values()) {
+            for (Game game : gameSet) {
+                if (game.isInGame(player)) {
                     return true;
-               }
+                }
             }
         }
         return false;
     }
 
-    private static Game getPlayerInGame(Player player){
-        for(Set<Game> gameSet:gameMap.values()){
-            for(Game game : gameSet){
-                if(game.isInGame(player)){
+    private static Game getPlayerInGame(Player player) {
+        for (Set<Game> gameSet : gameMap.values()) {
+            for (Game game : gameSet) {
+                if (game.isInGame(player)) {
                     return game;
                 }
             }
@@ -47,16 +47,39 @@ public class GameManager {
         return null;
     }
 
+    private static Game getPlayerInGame(Plugin plugin, Player player) {
+        Set<Game> gameSet = gameMap.computeIfAbsent(plugin, k -> new HashSet<>());
+        for (Game game : gameSet) {
+            if (game.isInGame(player)) {
+                return game;
+            }
+        }
+
+        return null;
+    }
+
     public static void playerChat(AsyncPlayerChatEvent asyncPlayerChatEvent) {
         Game game = getPlayerInGame(asyncPlayerChatEvent.getPlayer());
-        if(game == null){
+        if (game == null) {
             return;
         }
-        if(!game.isChatInGame()){
+        if (!game.isChatInGame()) {
             return;
         }
         asyncPlayerChatEvent.setCancelled(true);
+        game.chat(asyncPlayerChatEvent.getMessage(), asyncPlayerChatEvent.getPlayer());
+    }
 
+    public static void playerQuit(Player player) {
+        Game game = getPlayerInGame(player);
+        if (game == null) {
+            return;
+        }
+        if(game.isAllowRejoin()){
+            game.playerOffline(player);
+        }else{
+            game.left(player);
+        }
     }
 
 }

@@ -1,12 +1,16 @@
 package top.mahua_a.gamecore;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import top.mahua_a.gamecore.arena.Arena;
 import top.mahua_a.gamecore.arena.ArenaManager;
+import top.mahua_a.gamecore.game.Game;
+import top.mahua_a.gamecore.game.GameManager;
+import top.mahua_a.gamecore.listener.PlayerListener;
 
 import java.util.Objects;
 
@@ -25,6 +29,7 @@ public final class GameCore extends JavaPlugin {
             this.onDisable();
         }
         ArenaManager.removeOldArenaWorld();
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
     }
 
     @Override
@@ -39,11 +44,17 @@ public final class GameCore extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command,String label, String[] args) {
-        if(!(sender instanceof Player)){
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
             return true;
         }
-        Arena arena = ArenaManager.createNewArena(this,Objects.requireNonNull(getServer().getWorld("world")),((Player) sender).getLocation());
+        Arena arena = ArenaManager.createNewArena(this, Objects.requireNonNull(getServer().getWorld("world")), ((Player) sender).getLocation());
+
+        Game game = GameManager.createGame(this,"测试游戏",arena);
+        game.join((Player) sender);
+        //传送到竞技场！
+        //之所以不自动传送，是为了让插件更灵活的处理
+        ((Player) sender).teleport(game.getArena().getWorld().getSpawnLocation());
         return true;
     }
 
