@@ -27,6 +27,7 @@ public class Arena {
 
     public void left(Player player) {
         players.remove(player);
+        player.teleport(exitLocation);
     }
 
     public Set<Player> getPlayers() {
@@ -40,7 +41,7 @@ public class Arena {
     /**
      * Plugin shouldn't call this!
      */
-    protected void destroy() {
+    public void destroy() {
         //tp all player
         for(Player player : players){
             player.teleport(exitLocation);

@@ -6,9 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import top.mahua_a.gamecore.arena.Arena;
 import top.mahua_a.gamecore.arena.ArenaManager;
-import top.mahua_a.gamecore.listener.PlayerListener;
 
 import java.util.Objects;
 
@@ -27,14 +26,13 @@ public final class GameCore extends JavaPlugin {
             this.onDisable();
         }
         ArenaManager.removeOldArenaWorld();
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(),this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         // Destroy all arena
-        ArenaManager.clearArena();
+        ArenaManager.clearAllArenas();
     }
 
     public static MultiverseCore getMultiverseCore() {
@@ -46,7 +44,7 @@ public final class GameCore extends JavaPlugin {
         if(!(sender instanceof Player)){
             return true;
         }
-        ArenaManager.createNewArena(Objects.requireNonNull(getServer().getWorld("world")),((Player) sender).getLocation());
+        Arena arena = ArenaManager.createNewArena(this,Objects.requireNonNull(getServer().getWorld("world")),((Player) sender).getLocation());
         return true;
     }
 

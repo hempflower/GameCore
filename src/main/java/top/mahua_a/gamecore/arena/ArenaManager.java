@@ -1,28 +1,26 @@
 package top.mahua_a.gamecore.arena;
 
-import com.onarandombox.MultiverseCore.MVWorld;
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import top.mahua_a.gamecore.GameCore;
 
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ArenaManager {
-    private static Set<Arena> arenas = new HashSet<>();
+    private static Map<Plugin, Set<Arena>> arenas = new HashMap<>();
 
     /**
+     *
+     * @param plugin
      * @param world source world
      * @return arena instance
      */
-    public static Arena createNewArena(World world, Location exitLocation) {
+    public static Arena createNewArena(Plugin plugin, World world, Location exitLocation) {
         MVWorldManager mvWorldManager = GameCore.getMultiverseCore().getMVWorldManager();
         String newWorldName = "game-core-arena-" + System.currentTimeMillis();
         boolean success = GameCore.getMultiverseCore().getMVWorldManager().cloneWorld(world.getName(), newWorldName);
@@ -31,7 +29,7 @@ public class ArenaManager {
             return null;
         }
         Arena arena = new Arena(mvWorldManager.getMVWorld(newWorldName).getCBWorld(), exitLocation);
-        arenas.add(arena);
+        arenas.computeIfAbsent(plugin, k -> new HashSet<>()).add(arena);
         Bukkit.getLogger().info("Create arena successfully");
         return arena;
     }
@@ -45,15 +43,31 @@ public class ArenaManager {
         }
     }
 
-    public static void removeArena(Arena arena) {
+    public static void removeArena(Plugin plugin, Arena arena) {
         arena.destroy();
-        arenas.remove(arena);
+        getArenas(plugin).remove(arena);
     }
 
-    public static void clearArena() {
-        Iterator<Arena> arenaIterator = arenas.iterator();
-        while (arenaIterator.hasNext()){
-            removeArena(arenaIterator.next());
+    public static void clearArena(Plugin plugin) {
+        Iterator<Arena> arenaIterator = getArenas(plugin).iterator();
+        while (arenaIterator.hasNext()) {
+            removeArena(plugin, arenaIterator.next());
+        }
+    }
+
+    public static Set<Arena> getArenas(Plugin plugin) {
+        return arenas.computeIfAbsent(plugin, k -> new HashSet<>());
+    }
+
+    /**
+     * DO NOT USE THIS METHOD!!
+     */
+    public static void clearAllArenas() {
+        Iterator<Map.Entry<Plugin, Set<Arena>>> iterator = arenas.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<Plugin, Set<Arena>> setEntry = iterator.next();
+            clearArena(setEntry.getKey());
+            arenas.remove(setEntry.getKey());
         }
     }
 
