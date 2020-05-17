@@ -48,7 +48,7 @@ public class ArenaManager {
         getArenas(plugin).remove(arena);
     }
 
-    public static void clearArena(Plugin plugin) {
+    public static void clearArenas(Plugin plugin) {
         Iterator<Arena> arenaIterator = getArenas(plugin).iterator();
         while (arenaIterator.hasNext()) {
             removeArena(plugin, arenaIterator.next());
@@ -66,8 +66,8 @@ public class ArenaManager {
         Iterator<Map.Entry<Plugin, Set<Arena>>> iterator = arenas.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry<Plugin, Set<Arena>> setEntry = iterator.next();
-            clearArena(setEntry.getKey());
-            arenas.remove(setEntry.getKey());
+            clearArenas(setEntry.getKey());
+            iterator.remove();
         }
     }
 

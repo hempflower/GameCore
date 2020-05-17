@@ -25,7 +25,6 @@ public class Game {
     private Set<Player> players = new HashSet<>();
     private Set<Player> nonTeamPlayers = new HashSet<>();
     private Set<Player> watchingPlayers = new HashSet<>();
-    private Set<Player> invisiblePlayers = new HashSet<>();
     private Set<Player> leftPlayers = new HashSet<>();
 
     private Arena arena;
@@ -171,28 +170,4 @@ public class Game {
         watchingPlayers.remove(player);
     }
 
-    public void resetPlayer(Player player) {
-        player.setCustomName(player.getName());
-        player.setGlowing(false);
-        player.setGliding(false);
-        player.setFlying(false);
-        player.setAllowFlight(false);
-        player.getInventory().clear();
-        player.setLevel(0);
-        player.setExp(0);
-        player.setGameMode(GameMode.SURVIVAL);
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            player.removePotionEffect(effect.getType());
-        }
-    }
-
-    public void invisibleMode(Player player) {
-        resetPlayer(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 3, false, false));
-    }
-
-    public void visibleMode(Player player) {
-        resetPlayer(player);
-    }
 }

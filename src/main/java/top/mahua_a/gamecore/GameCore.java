@@ -10,7 +10,9 @@ import top.mahua_a.gamecore.arena.Arena;
 import top.mahua_a.gamecore.arena.ArenaManager;
 import top.mahua_a.gamecore.game.Game;
 import top.mahua_a.gamecore.game.GameManager;
+import top.mahua_a.gamecore.listener.EntityListener;
 import top.mahua_a.gamecore.listener.PlayerListener;
+import top.mahua_a.gamecore.util.SpectatorMode;
 
 import java.util.Objects;
 
@@ -30,6 +32,8 @@ public final class GameCore extends JavaPlugin {
         }
         ArenaManager.removeOldArenaWorld();
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
+
     }
 
     @Override
@@ -37,6 +41,7 @@ public final class GameCore extends JavaPlugin {
         // Plugin shutdown logic
         // Destroy all arena
         ArenaManager.clearAllArenas();
+        SpectatorMode.removeAll();
     }
 
     public static MultiverseCore getMultiverseCore() {
@@ -48,13 +53,28 @@ public final class GameCore extends JavaPlugin {
         if (!(sender instanceof Player)) {
             return true;
         }
-        Arena arena = ArenaManager.createNewArena(this, Objects.requireNonNull(getServer().getWorld("world")), ((Player) sender).getLocation());
+        if (args.length == 0) {
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("arena")) {
+            Arena arena = ArenaManager.createNewArena(this, Objects.requireNonNull(getServer().getWorld("world")), ((Player) sender).getLocation());
 
-        Game game = GameManager.createGame(this,"测试游戏",arena);
-        game.join((Player) sender);
-        //传送到竞技场！
-        //之所以不自动传送，是为了让插件更灵活的处理
-        ((Player) sender).teleport(game.getArena().getWorld().getSpawnLocation());
+            Game game = GameManager.createGame(this, "测试游戏", arena);
+            game.join((Player) sender);
+            //传送到竞技场！
+            //之所以不自动传送，是为了让插件更灵活的处理
+            ((Player) sender).teleport(game.getArena().getWorld().getSpawnLocation());
+        }
+
+        if (args[0].equalsIgnoreCase("sp")) {
+            if (SpectatorMode.isSpectatorMode((Player) sender)) {
+                SpectatorMode.removeSpectatorMode((Player) sender);
+            } else {
+                SpectatorMode.setSpectatorMode((Player) sender);
+            }
+
+        }
+
         return true;
     }
 
