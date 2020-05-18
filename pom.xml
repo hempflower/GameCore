@@ -87,7 +87,6 @@
             <id>orecraft-release</id>
             <url>http://maven.orecraft.cn/repository/maven-releases/</url>
         </repository>
-    
         <snapshotRepository>
             <id>orecraft-snapshot</id>
             <url>http://maven.orecraft.cn/repository/maven-snapshots/</url>
