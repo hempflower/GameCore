@@ -6,7 +6,7 @@
 
     <groupId>top.mahua_a</groupId>
     <artifactId>GameCore</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.${env.BUILD_NUMBER}</version>
     <packaging>jar</packaging>
     <name>GameCore</name>
 
@@ -18,7 +18,7 @@
     <build>
         <defaultGoal>clean package</defaultGoal>
         <!--suppress UnresolvedMavenProperty -->
-        <finalName>GameCore-${project.version}-B${env.BUILD_NUMBER}</finalName>
+        <finalName>GameCore-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -82,4 +82,15 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>orecraft-release</id>
+            <url>http://maven.orecraft.cn/repository/maven-releases/</url>
+        </repository>
+    
+        <snapshotRepository>
+            <id>orecraft-snapshot</id>
+            <url>http://maven.orecraft.cn/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

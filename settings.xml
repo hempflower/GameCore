@@ -1,0 +1,13 @@
+<settings>
+    <server>
+        <id>orecraft-release</id>
+        <username>${env.MVN_USER}</username>
+        <password>${env.MVN_PWD}</password>
+      </server>
+  
+      <server>
+        <id>orecraft-snapshot</id>
+        <username>${env.MVN_USER}</username>
+        <password>${env.MVN_PWD}</password>
+      </server>
+</settings>
